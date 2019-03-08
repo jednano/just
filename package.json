@@ -7,14 +7,35 @@
     "test": "test"
   },
   "devDependencies": {
+    "@types/node": "^11.10.5",
     "eslint": "^5.14.1",
+    "eslint-plugin-prettier": "^3.0.1",
+    "husky": "^1.3.1",
     "lerna": "^3.13.1",
+    "lint-staged": "^8.1.5",
+    "prettier": "^1.16.4",
     "tap-spec": "^5.0.0",
-    "tape": "^4.6.0"
+    "tape": "^4.6.0",
+    "typescript": "^3.3.3333"
   },
   "scripts": {
-    "lint": "eslint .",
+    "check-types": "tsc -p tsconfig.test.json --noEmit",
+    "lint": "eslint . --fix",
+    "pretest": "tsc",
     "test": "npm run lint && tape ./test/**/index.js | tap-spec"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged",
+      "pre-push": "npm run check-types"
+    }
+  },
+  "lint-staged": {
+    "packages/**/*.{ts}": [
+      "eslint --fix",
+      "prettier --write",
+      "git add"
+    ]
   },
   "repository": {
     "type": "git",
